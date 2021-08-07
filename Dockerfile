@@ -6,17 +6,12 @@ RUN apk add --no-cache build-base linux-headers git bash make openssl-dev && \
     make && \
     strip /smartdns/src/smartdns
 
-RUN git clone https://github.com/Yelp/dumb-init.git --depth 1 && \
-    cd dumb-init && \
-    make
-
 FROM alpine:latest
 
-RUN apk add --no-cache ca-certificates openssl
+RUN apk add --no-cache ca-certificates openssl dumb-init
 COPY --from=builder /smartdns/src/smartdns /usr/sbin/smartdns
-COPY --from=builder /dumb-init/dumb-init /usr/bin/dumb-init
 
-RUN chmod 755 /usr/sbin/smartdns /usr/bin/dumb-init
+RUN chmod 755 /usr/sbin/smartdns
 
 EXPOSE 53/udp 53/tcp
 VOLUME "/etc/smartdns/"
