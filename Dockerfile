@@ -8,7 +8,7 @@ RUN apk add --no-cache build-base linux-headers git bash make openssl-dev && \
 
 FROM alpine:latest
 
-RUN apk add --no-cache ca-certificates openssl dumb-init
+RUN apk add --no-cache libgcc ca-certificates openssl dumb-init
 COPY --from=builder /smartdns/src/smartdns /usr/sbin/smartdns
 
 RUN chmod 755 /usr/sbin/smartdns
