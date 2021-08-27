@@ -17,6 +17,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout SmartDNS
+        uses: actions/checkout@v2
+        with:
+          repository: 'pymumu/smartdns'
+          path: 'smartdns-src'
+          fetch-depth: 0
+
+      - name: Get SmartDNS Commit ID
+        run: cd smartdns-src && echo "SMARTDNS_SHA1_SHORT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
         with:
@@ -38,6 +48,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          tags: waf7225/smartdns:latest
+          tags: waf7225/smartdns:latest, waf7225/smartdns:${{ env.SMARTDNS_SHA1_SHORT }}
           platforms: linux/amd64,linux/arm/v7,linux/arm64
           push: true
